@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt'); //require bcrypt for hashing (NOT for encryption)
-
+const jwt = require('jsonwebtoken');
 
 //new user schema
 const users = new mongoose.Schema({

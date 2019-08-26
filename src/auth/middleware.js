@@ -2,6 +2,7 @@
 
 const User = require('./users-model.js');
 
+
 module.exports = (req, res, next) => {
 
   try {
@@ -9,6 +10,9 @@ module.exports = (req, res, next) => {
     let [authType, encodedString] = req.headers.authorization.split(/\s+/);
 
     // BASIC Auth  ... Authorization:Basic ZnJlZDpzYW1wbGU=
+    //JWT authorization header? 
+    //Authorization: Basic ZGVtbzpwQDU1dzByZA==
+
 
     switch(authType.toLowerCase()) {
       case 'basic':
