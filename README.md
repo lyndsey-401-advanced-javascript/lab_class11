@@ -1,8 +1,11 @@
-# LAB - 
+# LAB - Class 11
 
 ## Project Name
+Authentication
 
 ### Author: Student/Group Name
+Bradley Elliot
+Lyndsey Thomas
 
 ### Mongo DB URL
 
