@@ -13,6 +13,7 @@ const users = new mongoose.Schema({
 });
 
 users.pre('save', function(next) {
+  const SALT_ROUNDS = 10;
   bcrypt.hash(this.password,10)
     .then(hashedPassword => {
       this.password = hashedPassword;
@@ -22,15 +23,17 @@ users.pre('save', function(next) {
 });
 
 users.statics.authenticateBasic = function(auth) {
-  let query = {username:auth.username};
+  let query = {username: auth.username};
   return this.findOne(query)
-    .then(user => user && user.comparePassword(auth.password))
+    .then(user => {
+      return user && user.comparePassword(auth.password) ? user : null;
+    }) //will break a supergoose test ?
     .catch(console.error);
 };
 
 // Compare a plain text password against the hashed one we have saved
-users.methods.comparePassword = function(password) {
-  return bcrypt.compare(password, this.password);
+users.methods.comparePassword = function(rawPassword) {
+  return bcrypt.compare(rawPassword, this.password);
 };
 
 // Generate a JWT from the user id and a secret

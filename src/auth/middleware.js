@@ -10,8 +10,6 @@ module.exports = (req, res, next) => {
     let [authType, encodedString] = req.headers.authorization.split(/\s+/);
 
     // BASIC Auth  ... Authorization:Basic ZnJlZDpzYW1wbGU=
-    //JWT authorization header? 
-    //Authorization: Basic ZGVtbzpwQDU1dzByZA==
 
 
     switch(authType.toLowerCase()) {
@@ -25,18 +23,20 @@ module.exports = (req, res, next) => {
     return _authError();
   }
 
-  function _authBasic() {
+  function _authBasic(authString) {
     let base64Buffer = Buffer.from(authString,'base64'); // <Buffer 01 02...>
     let bufferString = base64Buffer.toString(); // john:mysecret
     let [username,password] = bufferString.split(':');  // variables username="john" and password="mysecret"
-    let auth = [username,password];  // {username:"john", password:"mysecret"}
+    let auth = {username,password};  // {username:"john", password:"mysecret"}
 
-    return User.authenticateBasic(auth)
+    return User.authenticateBasic(auth) //userSignIn
       .then( user => _authenticate(user) );
   }
 
   function _authenticate(user) {
     if ( user ) {
+      req.user = user;
+      req.token = user.generateToken();
       next();
     }
     else {
