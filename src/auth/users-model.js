@@ -12,8 +12,14 @@ const users = new mongoose.Schema({
   role: {type: String, required:true, default:'user', enum:['admin','editor','user'] },
 });
 
+//pre hook for modifying password to a hash 
+//user obeject being checked for isModified mothod on ('password')
+//users.pre('save', async function()) {
+//   this.password = await bcrypt.hash(this.password, 10);
+//    }
+// });
+
 users.pre('save', function(next) {
-  const SALT_ROUNDS = 10;
   bcrypt.hash(this.password,10)
     .then(hashedPassword => {
       this.password = hashedPassword;
