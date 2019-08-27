@@ -27,7 +27,7 @@ users.statics.authenticateBasic = function(auth) {
   return this.findOne(query)
     .then(user => {
       return user && user.comparePassword(auth.password) ? user : null;
-    }) //will break a supergoose test ?
+    }) //will break a supergoose test 
     .catch(console.error);
 };
 
